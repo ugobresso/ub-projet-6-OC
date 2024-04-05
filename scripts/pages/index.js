@@ -25,6 +25,7 @@ async function displayData(photographers) {
         photographerModel.addEventListener('click', () => {
             // Get photographers data
             const photographerInfo = {
+                id: currentPhotographer.id,
                 name: currentPhotographer.name,
                 cityCountry: currentPhotographer.city + ', ' + currentPhotographer.country,
                 tagline: currentPhotographer.tagline,

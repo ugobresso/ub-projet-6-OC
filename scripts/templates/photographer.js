@@ -37,13 +37,12 @@ function photographerTemplate(data) {
     priceElement.textContent = `${price}€/jour`;
     priceElement.classList.add('price');
 
-    // Ajout des autres éléments à la carte utilisateur
+    // Adding all the elements to the usercard
     userCardDOM.appendChild(imageContainer);
     userCardDOM.appendChild(nameElement);
     userCardDOM.appendChild(cityCountryElement);
     userCardDOM.appendChild(taglineElement);
     userCardDOM.appendChild(priceElement);
-
-    // Retourne 
+ 
     return userCardDOM;
 }

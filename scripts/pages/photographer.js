@@ -46,7 +46,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
         imageContainer.appendChild(imageElement);
         photographerHeader.appendChild(imageContainer);
+
+
+        // GALLERY
+
+        // Function to get media from JSON file
+        async function getMedia() {
+            try {
+                const response = await fetch('/data/photographers.json');
+                if (!response.ok) {
+                    throw new Error('Erreur de chargement des données des médias');
+                }
+                const data = await response.json();
+                return { media: data.media };
+            } catch (error) {
+                console.error('Erreur :', error);
+                return { media: [] };
+            }
+        }
+
+        // Function to show media data on the website
+        async function displayMediaData(media) {
+            const gallerySection = document.getElementsByClassName("photograph-gallery")[0];
+
+            media.forEach((currentMedia) => {
+                const mediaModel = mediaTemplate(currentMedia);
+                gallerySection.appendChild(mediaModel);
+            });
+        }
+
+        async function initMedia() {
+            // Return media data from JSON file
+            const { media } = await getMedia();
+            displayMediaData(media);
+        }
+
+        initMedia();
+  
     } else {
         console.error('No photographer data found in the local storage.');
     }
+
 });
