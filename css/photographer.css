@@ -3,9 +3,35 @@
 }
 
 .photograph-header {
+    display: flex;
     background-color: #FAFAFA;
     height: 300px;
     margin: 0 100px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+}
+
+.user-card {
+    display: flex;
+    align-items: flex-start;
+    font-weight: 400;
+}
+
+.user-card h2 {
+    font-size: 54px;
+    margin: 0;
+}
+
+.user-card .city-country {
+    font-size: 24px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+}
+
+.user-card .tagline {
+    font-size: 18px;
+    color: #525252;
 }
 
 .contact_button {

@@ -85,16 +85,16 @@ h2 {
     text-align: center;
 }
 
-.user-card .city-country {
+.city-country {
     color: #901C1C;
     font-size: 13px;
 }
 
-.user-card .tagline {
+.tagline {
     font-size: 10px;
 }
 
-.user-card .price {
+.price {
     font-size: 9px;
     color: #757575;
 }

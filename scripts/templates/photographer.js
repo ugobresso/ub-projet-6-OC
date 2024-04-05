@@ -23,6 +23,7 @@ function photographerTemplate(data) {
     // Creation of the other elements of the usercard
     const nameElement = document.createElement('h2');
     nameElement.textContent = name;
+    nameElement.classList.add('photographer-name');
 
     const cityCountryElement = document.createElement('p');
     cityCountryElement.textContent = `${city}, ${country}`;
