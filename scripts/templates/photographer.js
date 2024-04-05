@@ -1,17 +1,48 @@
+/**
+ * Function : returning the usercard DOM
+ */
 function photographerTemplate(data) {
-    const { name, portrait } = data;
+    const { name, city, country, tagline, price, portrait } = data;
 
-    const picture = `assets/photographers/${portrait}`;
+    // Usercard article creation
+    const userCardDOM = document.createElement('article');
+    userCardDOM.classList.add('user-card');
+    
+    // Img container creation
+    const imageContainer = document.createElement('div');
+    imageContainer.classList.add('image-container');
 
-    function getUserCardDOM() {
-        const article = document.createElement( 'article' );
-        const img = document.createElement( 'img' );
-        img.setAttribute("src", picture)
-        const h2 = document.createElement( 'h2' );
-        h2.textContent = name;
-        article.appendChild(img);
-        article.appendChild(h2);
-        return (article);
-    }
-    return { name, picture, getUserCardDOM }
+    // Img creation
+    const imageElement = document.createElement('img');
+    imageElement.src = `/assets/photographers/${portrait}`;
+    imageElement.alt = name;
+
+    // Adding the img to its container
+    imageContainer.appendChild(imageElement);
+
+    // Creation of the other elements of the usercard
+    const nameElement = document.createElement('h2');
+    nameElement.textContent = name;
+
+    const cityCountryElement = document.createElement('p');
+    cityCountryElement.textContent = `${city}, ${country}`;
+    cityCountryElement.classList.add('city-country');
+
+    const taglineElement = document.createElement('p');
+    taglineElement.textContent = tagline;
+    taglineElement.classList.add('tagline');
+
+    const priceElement = document.createElement('p');
+    priceElement.textContent = `${price}€/jour`;
+    priceElement.classList.add('price');
+
+    // Ajout des autres éléments à la carte utilisateur
+    userCardDOM.appendChild(imageContainer);
+    userCardDOM.appendChild(nameElement);
+    userCardDOM.appendChild(cityCountryElement);
+    userCardDOM.appendChild(taglineElement);
+    userCardDOM.appendChild(priceElement);
+
+    // Retourne 
+    return userCardDOM;
 }

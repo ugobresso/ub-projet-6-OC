@@ -80,7 +80,21 @@ h2 {
 }
 
 .user-card p {
-    font-size: 10px;
     margin: 2px;
     text-wrap: nowrap;
+    text-align: center;
+}
+
+.user-card .city-country {
+    color: #901C1C;
+    font-size: 13px;
+}
+
+.user-card .tagline {
+    font-size: 10px;
+}
+
+.user-card .price {
+    font-size: 9px;
+    color: #757575;
 }
