@@ -18,11 +18,17 @@ function mediaTemplate(data) {
         mediaElement = document.createElement('img');
         mediaElement.src = `/assets/images/${image}`;
         mediaElement.alt = title;
+        mediaElement.addEventListener('click', () => {
+            openMediaInFullscreen(`/assets/images/${image}`, data.index, totalMedia, media);
+        });
     } else if (video) {
         mediaElement = document.createElement('video');
         mediaElement.src = `/assets/images/${video}`;
         mediaElement.alt = title;
         mediaElement.controls = true; // Adding lecture controls to the video
+        mediaElement.addEventListener('click', () => {
+            openMediaInFullscreen(`/assets/images/${video}`, data.index, totalMedia, media);
+        });
     }
 
     // Adding the img to its container
@@ -140,7 +146,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 gallerySection.innerHTML = '';
 
                 // Display sorted media
-                sortedMedia.forEach(currentMedia => {
+                sortedMedia.forEach((currentMedia, index) => { // Adding index as a second parameter
+                    currentMedia.index = index; // Define media index
                     const mediaModel = mediaTemplate(currentMedia);
                     gallerySection.appendChild(mediaModel);
                 });
@@ -171,9 +178,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         
                 // Calculate total likes for the current photographer
                 const totalLikes = filteredMedia.reduce((acc, curr) => acc + curr.likes, 0);
+
+                // Calculate total number of media items
+                const totalMedia = filteredMedia.length;
         
                 // Display media data
-                await displayMediaData(filteredMedia);
+                await displayMediaData(filteredMedia, totalMedia, media);
         
                 // Find the parent element where you want to add the info rectangle
                 const main = document.querySelector('main');
@@ -194,8 +204,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.error('Error:', error);
             }
         }
-        
-
 
         // Call function to initialize media
         await initMedia();
