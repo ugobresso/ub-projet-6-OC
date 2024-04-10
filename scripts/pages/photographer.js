@@ -156,42 +156,45 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Function to initialize media
-async function initMedia() {
-    try {
-        // Fetch media data from JSON file
-        const response = await fetch('/data/photographers.json');
-        if (!response.ok) {
-            throw new Error('Error loading media data');
-        }
-        const data = await response.json();
-        const media = data.media;
-
-        // Calculate total likes
-        const totalLikes = media.reduce((acc, curr) => acc + curr.likes, 0);
-        console.log(totalLikes);
+        async function initMedia() {
+            try {
+                // Fetch media data from JSON file
+                const response = await fetch('/data/photographers.json');
+                if (!response.ok) {
+                    throw new Error('Error loading media data');
+                }
+                const data = await response.json();
+                const media = data.media;
         
-        // Display media data
-        await displayMediaData(media);
-
-        // Find the parent element where you want to add the info rectangle
-        const main = document.querySelector('main');
-
-        // Create the div for the info rectangle
-        const informationBox = document.createElement('div');
-        informationBox.classList.add('information-box');
-
-        // Add content to the infoRectangle div
-        informationBox.innerHTML = `
-            <p>${totalLikes}</p>
-            <p>${photographerInfo.price} € / jour</p>
-        `;
-
-        // Add the info rectangle to the parent element
-        main.appendChild(informationBox);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
+                // Filter media for the current photographer
+                const filteredMedia = media.filter(m => m.photographerId === photographerInfo.id);
+        
+                // Calculate total likes for the current photographer
+                const totalLikes = filteredMedia.reduce((acc, curr) => acc + curr.likes, 0);
+        
+                // Display media data
+                await displayMediaData(filteredMedia);
+        
+                // Find the parent element where you want to add the info rectangle
+                const main = document.querySelector('main');
+        
+                // Create the div for the info rectangle
+                const informationBox = document.createElement('div');
+                informationBox.classList.add('information-box');
+        
+                // Add content to the infoRectangle div
+                informationBox.innerHTML = `
+                    <p>${totalLikes} <img src="/assets/icons/heart.svg" alt="heart icon"></p>
+                    <p>${photographerInfo.price}€ / jour</p>
+                `;
+        
+                // Add the info rectangle to the parent element
+                main.appendChild(informationBox);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        
 
 
         // Call function to initialize media
