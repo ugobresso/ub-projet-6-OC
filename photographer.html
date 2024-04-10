@@ -16,6 +16,14 @@
     </header>
     <main id="main">
       <section class="photograph-header"></section>
+      <section class="sort-section">
+        <label for="sort-select-label">Trier par :</label>
+        <select id="sort-select" class="sort-select" aria-label="Trier par" role="listbox">
+            <option value="likes">Popularité</option>
+            <option value="date">Date</option>
+            <option value="title">Titre</option>
+        </select>
+      </section>
       <section class="photograph-gallery"></section>
     </main>
     <div id="contact_modal">
@@ -37,5 +45,6 @@
     <script src="/scripts/utils/contactForm.js"></script>
     <script src="/scripts/templates/photographer.js"></script>
     <script src="/scripts/templates/media.js"></script>
+    <script src="/scripts/templates/sortsection.js"></script>
   </body>
 </html>

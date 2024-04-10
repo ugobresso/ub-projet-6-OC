@@ -2,7 +2,7 @@
  * Function : returning the media grid
  */
 function mediaTemplate(data) {
-    const { title, image, likes } = data;
+    const { title, image, video, likes } = data;
 
     // Gallery grid  creation
     const mediaContent = document.createElement('article');
@@ -12,13 +12,21 @@ function mediaTemplate(data) {
     const mediaContainer = document.createElement('div');
     mediaContainer.classList.add('picture-container');
 
-    // Img creation
-    const mediaImage = document.createElement('img');
-    mediaImage.src = `/assets/images/${image}`;
-    mediaImage.alt = title;
+    // Media creation (either image or video)
+    let mediaElement;
+    if (image) {
+        mediaElement = document.createElement('img');
+        mediaElement.src = `/assets/images/${image}`;
+        mediaElement.alt = title;
+    } else if (video) {
+        mediaElement = document.createElement('video');
+        mediaElement.src = `/assets/images/${video}`;
+        mediaElement.alt = title;
+        mediaElement.controls = true; // Ajoute des contrôles de lecture à la vidéo
+    }
 
     // Adding the img to its container
-    mediaContainer.appendChild(mediaImage);
+    mediaContainer.appendChild(mediaElement);
 
     // Text group creation
     const mediaText = document.createElement('div');
@@ -46,6 +54,7 @@ function mediaTemplate(data) {
     
     mediaText.appendChild(mediaTitle);
     mediaText.appendChild(likesContainer);
+
 
     // Adding all the elements to the usercard
     mediaContent.appendChild(mediaContainer);

@@ -1,90 +1,203 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Get back photograph data stored in the localStorage
+/**
+ * Function : returning the media grid
+ */
+function mediaTemplate(data) {
+    const { title, image, video, likes } = data;
+
+    // Gallery grid  creation
+    const mediaContent = document.createElement('article');
+    mediaContent.classList.add('media-content');
+    
+    // Media container creation
+    const mediaContainer = document.createElement('div');
+    mediaContainer.classList.add('picture-container');
+
+    // Media creation (either image or video)
+    let mediaElement;
+    if (image) {
+        mediaElement = document.createElement('img');
+        mediaElement.src = `/assets/images/${image}`;
+        mediaElement.alt = title;
+    } else if (video) {
+        mediaElement = document.createElement('video');
+        mediaElement.src = `/assets/images/${video}`;
+        mediaElement.alt = title;
+        mediaElement.controls = true; // Adding lecture controls to the video
+    }
+
+    // Adding the img to its container
+    mediaContainer.appendChild(mediaElement);
+
+    // Text group creation
+    const mediaText = document.createElement('div');
+    mediaText.classList.add('media-text');
+
+    // Title  creation
+    const mediaTitle = document.createElement('p');
+    mediaTitle.textContent = title;
+    mediaTitle.classList.add('media-title');
+
+    // Adding the number of likes
+    const likesContainer = document.createElement('div');
+    likesContainer.classList.add('likes-container');
+
+    const likesNumber = document.createElement('p');
+    likesNumber.textContent = likes;
+    likesNumber.classList.add('likes-number');
+
+    const likesIcon = document.createElement('img');
+    likesIcon.src = '/assets/icons/heart.svg';
+    likesIcon.alt = 'heart icon';
+
+    likesContainer.appendChild(likesNumber);
+    likesContainer.appendChild(likesIcon);
+    
+    mediaText.appendChild(mediaTitle);
+    mediaText.appendChild(likesContainer);
+
+    // Adding all the elements to the usercard
+    mediaContent.appendChild(mediaContainer);
+    mediaContent.appendChild(mediaText);
+ 
+    return mediaContent;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    // Get back photographer data stored in the localStorage
     const photographerInfo = JSON.parse(localStorage.getItem('selectedPhotographer'));
 
-    // Check if the data is existant
+    // Check if the data exists
     if (photographerInfo) {
-        // Creation of the HTML article with photograph information
+        // Create photographer header
+        const photographerHeader = document.querySelector('.photograph-header');
+
+        // Create user card element
         const userCardElement = document.createElement('article');
         userCardElement.classList.add('user-card');
 
-        const nameElement = document.createElement('h2');
-        nameElement.textContent = photographerInfo.name;
-        nameElement.classList.add('photographer-name');
+        // Create name, city-country, tagline and price elements
+        const currentNameElement = document.createElement('h2');
+        currentNameElement.textContent = photographerInfo.name;
+        currentNameElement.classList.add('photographer-name');
 
-        const cityCountryElement = document.createElement('p');
-        cityCountryElement.textContent = photographerInfo.cityCountry;
-        cityCountryElement.classList.add('city-country');
+        const currentCityCountryElement = document.createElement('p');
+        currentCityCountryElement.textContent = photographerInfo.cityCountry;
+        currentCityCountryElement.classList.add('city-country');
 
-        const taglineElement = document.createElement('p');
-        taglineElement.textContent = photographerInfo.tagline;
-        taglineElement.classList.add('tagline');
+        const currentTaglineElement = document.createElement('p');
+        currentTaglineElement.textContent = photographerInfo.tagline;
+        currentTaglineElement.classList.add('tagline');
 
-        // Adding the elements
-        userCardElement.appendChild(nameElement);
-        userCardElement.appendChild(cityCountryElement);
-        userCardElement.appendChild(taglineElement);
+        // Add elements to the user card
+        userCardElement.appendChild(currentNameElement);
+        userCardElement.appendChild(currentCityCountryElement);
+        userCardElement.appendChild(currentTaglineElement);
 
-        // Get the photograph header and adding the usercard
-        const photographerHeader = document.querySelector('.photograph-header');
+        // Add user card to photographer header
         photographerHeader.appendChild(userCardElement);
 
-        // Contact button
+        // Create contact button
         const contactButton = document.createElement('button');
         contactButton.textContent = 'Contactez-moi';
         contactButton.classList.add('contact_button');
         contactButton.addEventListener('click', displayModal);
         photographerHeader.appendChild(contactButton);
 
-        // Image
+        // Create image container
         const imageContainer = document.createElement('div');
         imageContainer.classList.add('image-container');
 
+        // Create image element
         const imageElement = document.createElement('img');
         imageElement.src = `/assets/photographers/${photographerInfo.portrait}`;
         imageElement.alt = photographerInfo.name;
 
+        // Add image element to image container
         imageContainer.appendChild(imageElement);
         photographerHeader.appendChild(imageContainer);
 
-
-        // GALLERY
-
-        // Function to get media from JSON file
-        async function getMedia() {
-            try {
-                const response = await fetch('/data/photographers.json');
-                if (!response.ok) {
-                    throw new Error('Erreur de chargement des données des médias');
-                }
-                const data = await response.json();
-                return { media: data.media };
-            } catch (error) {
-                console.error('Erreur :', error);
-                return { media: [] };
-            }
-        }
-
-        // Function to show media data on the website
+        // Function to filter and display media data on the website
         async function displayMediaData(media) {
-            const gallerySection = document.getElementsByClassName("photograph-gallery")[0];
+            const gallerySection = document.querySelector('.photograph-gallery');
 
-            media.forEach((currentMedia) => {
+            // Filter media based on current photographer ID
+            const filteredMedia = media.filter(m => m.photographerId === photographerInfo.id);
+
+            // Sort filtered media based on selected option
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.addEventListener('change', async () => {
+                const selectedOption = sortSelect.value;
+                let sortedMedia = [];
+                if (selectedOption === 'likes') {
+                    sortedMedia = filteredMedia.sort((a, b) => b.likes - a.likes); // Sort by likes (descending)
+                } else if (selectedOption === 'date') {
+                    sortedMedia = filteredMedia.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date (descending)
+                } else if (selectedOption === 'title') {
+                    sortedMedia = filteredMedia.sort((a, b) => a.title.localeCompare(b.title)); // Sort by title (ascending)
+                }
+
+                // Clear gallery section
+                gallerySection.innerHTML = '';
+
+                // Display sorted media
+                sortedMedia.forEach(currentMedia => {
+                    const mediaModel = mediaTemplate(currentMedia);
+                    gallerySection.appendChild(mediaModel);
+                });
+            });
+
+            // Initially display media sorted by likes
+            sortSelect.value = 'likes';
+            const sortedMedia = filteredMedia.sort((a, b) => b.likes - a.likes); // Sort by likes (descending)
+            sortedMedia.forEach(currentMedia => {
                 const mediaModel = mediaTemplate(currentMedia);
                 gallerySection.appendChild(mediaModel);
             });
         }
 
-        async function initMedia() {
-            // Return media data from JSON file
-            const { media } = await getMedia();
-            displayMediaData(media);
+        // Function to initialize media
+async function initMedia() {
+    try {
+        // Fetch media data from JSON file
+        const response = await fetch('/data/photographers.json');
+        if (!response.ok) {
+            throw new Error('Error loading media data');
         }
+        const data = await response.json();
+        const media = data.media;
 
-        initMedia();
-  
+        // Calculate total likes
+        const totalLikes = media.reduce((acc, curr) => acc + curr.likes, 0);
+        console.log(totalLikes);
+        
+        // Display media data
+        await displayMediaData(media);
+
+        // Find the parent element where you want to add the info rectangle
+        const main = document.querySelector('main');
+
+        // Create the div for the info rectangle
+        const informationBox = document.createElement('div');
+        informationBox.classList.add('information-box');
+
+        // Add content to the infoRectangle div
+        informationBox.innerHTML = `
+            <p>${totalLikes}</p>
+            <p>${photographerInfo.price} € / jour</p>
+        `;
+
+        // Add the info rectangle to the parent element
+        main.appendChild(informationBox);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+        // Call function to initialize media
+        await initMedia();
+
     } else {
         console.error('No photographer data found in the local storage.');
     }
-
 });

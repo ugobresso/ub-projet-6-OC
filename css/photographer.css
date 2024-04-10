@@ -2,6 +2,11 @@
     display: none;
 }
 
+body {
+    font-family: "DM Sans", sans-serif;
+    margin: 0;
+}
+
 p {
     margin: 0;
 }
@@ -49,6 +54,11 @@ p {
     background-color: #901C1C;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.contact_button:hover {
+    background-color: #DB8876;
+    color: black;
 }
 
 .modal {
@@ -105,12 +115,67 @@ form input {
     border-radius: 5px;
 }
 
+/* SORT SECTION */
+
+.sort-section {
+    display: flex;
+    flex-direction: line;
+    margin: 50px 100px;
+    font-size: 18px;
+    gap: 20px;
+    height: 30px;
+    align-items: flex-start;
+    position: relative; /* Modifiez cette ligne */
+}
+
+#sort-select {
+    display: flex;
+    z-index: 100;
+    width: 140px;
+    min-height: 50px;
+    background-color: #901C1C;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    position: relative;
+    padding: 10px;
+    transition: height 0.8s ease;
+}
+
+/* select menu */
+#sort-select option {
+    background-color: #901C1C;
+    color: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    justify-content: flex-start;
+}
+
+/* sort-select menu when opened */
+#sort-select:focus {
+    outline: none;
+    height: auto;
+    padding: 0px;
+}
+
+
+
+/* GALLERY */
+
 .photograph-gallery {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 50px 100px;
     justify-content: space-between;
     gap: 40px 100px;
+    left: 0;
+    z-index: 0;
+    overflow-y: auto;
 }
 
 .media-content {
@@ -119,7 +184,7 @@ form input {
     gap: 10px;
 }
 
-.picture-container img {
+.picture-container img, video {
     object-fit: cover;
     border-radius: 5px;
     width: 100%;
@@ -142,4 +207,23 @@ form input {
     display: flex;
     flex-direction: line;
     gap: 5px;
+}
+
+/* INFORMATION BOX */
+
+.information-box {
+    display: flex;
+    flex-direction: line;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    right: 50px;
+    z-index: 101;
+    font-size: 20px;
+    color: black;
+    background-color: #DB8876;
+    border-radius: 5px;
 }
