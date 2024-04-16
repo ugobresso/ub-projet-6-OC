@@ -1,10 +1,10 @@
 /**
  * Function : returning the media grid
  */
-function mediaTemplate(data) {
+function mediaTemplate(data, index, media) {
     const { title, image, video, likes } = data;
 
-    // Gallery grid  creation
+    // Gallery grid creation
     const mediaContent = document.createElement('article');
     mediaContent.classList.add('media-content');
     
@@ -19,7 +19,7 @@ function mediaTemplate(data) {
         mediaElement.src = `/assets/images/${image}`;
         mediaElement.alt = title;
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${image}`, data.index, totalMedia, media);
+            openMediaInFullscreen(`/assets/images/${image}`, index, media.length, media);
         });
     } else if (video) {
         mediaElement = document.createElement('video');
@@ -27,7 +27,7 @@ function mediaTemplate(data) {
         mediaElement.alt = title;
         mediaElement.controls = true; // Adding lecture controls to the video
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${video}`, data.index, totalMedia, media);
+            openMediaInFullscreen(`/assets/images/${video}`, index, media.length, media);
         });
     }
 
@@ -38,7 +38,7 @@ function mediaTemplate(data) {
     const mediaText = document.createElement('div');
     mediaText.classList.add('media-text');
 
-    // Title  creation
+    // Title creation
     const mediaTitle = document.createElement('p');
     mediaTitle.textContent = title;
     mediaTitle.classList.add('media-title');
@@ -147,8 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // Display sorted media
                 sortedMedia.forEach((currentMedia, index) => { // Adding index as a second parameter
-                    currentMedia.index = index; // Define media index
-                    const mediaModel = mediaTemplate(currentMedia);
+                    const mediaModel = mediaTemplate(currentMedia, index, media);
                     gallerySection.appendChild(mediaModel);
                 });
             });
@@ -156,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Initially display media sorted by likes
             sortSelect.value = 'likes';
             const sortedMedia = filteredMedia.sort((a, b) => b.likes - a.likes); // Sort by likes (descending)
-            sortedMedia.forEach(currentMedia => {
-                const mediaModel = mediaTemplate(currentMedia);
+            sortedMedia.forEach((currentMedia, index) => {
+                const mediaModel = mediaTemplate(currentMedia, index, media);
                 gallerySection.appendChild(mediaModel);
             });
         }
@@ -183,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const totalMedia = filteredMedia.length;
         
                 // Display media data
-                await displayMediaData(filteredMedia, totalMedia, media);
+                await displayMediaData(filteredMedia, totalMedia);
         
                 // Find the parent element where you want to add the info rectangle
                 const main = document.querySelector('main');

@@ -17,7 +17,7 @@ function mediaTemplate(data, totalMedia) {
         mediaElement.src = `/assets/images/${image}`;
         mediaElement.alt = title;
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${image}`, data.index, totalMedia);
+            openMediaInFullscreen(`/assets/images/${image}`, data.index, totalMedia, media);
         });
     } else if (video) {
         mediaElement = document.createElement('video');
@@ -25,7 +25,7 @@ function mediaTemplate(data, totalMedia) {
         mediaElement.alt = title;
         mediaElement.controls = true; // Adding lecture controls to the video
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${video}`, data.index, totalMedia);
+            openMediaInFullscreen(`/assets/images/${video}`, data.index, totalMedia, media);
         });
     }
 
@@ -118,8 +118,10 @@ function openMediaInFullscreen(mediaURL, mediaIndex, totalMedia, media) {
     previousButton.addEventListener('click', () => {
         // Handle previous media logic here
         const previousIndex = (mediaIndex - 1 + totalMedia) % totalMedia; // Calculate previous index, considering circular navigation
-        const previousMediaURL = media[previousIndex].url;
-        fullscreenMedia.src = previousMediaURL;
+        const previousMedia = media[previousIndex];
+        if (previousMedia) {
+            openMediaInFullscreen(previousMedia.url, previousIndex, totalMedia, media);
+        }
     });
 
     // Create a button for next media
@@ -133,8 +135,10 @@ function openMediaInFullscreen(mediaURL, mediaIndex, totalMedia, media) {
     nextButton.addEventListener('click', () => {
         // Handle next media logic here
         const nextIndex = (mediaIndex + 1) % totalMedia; // Calculate next index, considering circular navigation
-        const nextMediaURL = media[nextIndex].url;
-        fullscreenMedia.src = nextMediaURL;
+        const nextMedia = media[nextIndex];
+        if (nextMedia) {
+            openMediaInFullscreen(nextMedia.url, nextIndex, totalMedia, media);
+        }
     });
 
     // Add the buttons to the fullscreen container
@@ -157,12 +161,11 @@ async function displayMediaData(media, totalMedia) {
     gallerySection.innerHTML = '';
 
     // Display media
-    media.forEach(currentMedia => {
+    media.forEach((currentMedia, index) => {
         const mediaModel = mediaTemplate(currentMedia, totalMedia);
         gallerySection.appendChild(mediaModel);
     });
 }
-
 
 // Event listener when the DOM content is loaded
 document.addEventListener('DOMContentLoaded', async () => {
