@@ -1,7 +1,7 @@
 /**
  * Function : returning the media grid
  */
-function mediaTemplate(data, index, media) {
+function mediaGridTemplate(data) {
     const { title, image, video, likes } = data;
 
     // Gallery grid creation
@@ -19,7 +19,7 @@ function mediaTemplate(data, index, media) {
         mediaElement.src = `/assets/images/${image}`;
         mediaElement.alt = title;
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${image}`, index, media.length, media);
+            openMediaInFullscreen(`/assets/images/${image}`);
         });
     } else if (video) {
         mediaElement = document.createElement('video');
@@ -27,7 +27,7 @@ function mediaTemplate(data, index, media) {
         mediaElement.alt = title;
         mediaElement.controls = true; // Adding lecture controls to the video
         mediaElement.addEventListener('click', () => {
-            openMediaInFullscreen(`/assets/images/${video}`, index, media.length, media);
+            openMediaInFullscreen(`/assets/images/${video}`);
         });
     }
 
@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 gallerySection.innerHTML = '';
 
                 // Display sorted media
-                sortedMedia.forEach((currentMedia, index) => { // Adding index as a second parameter
-                    const mediaModel = mediaTemplate(currentMedia, index, media);
+                sortedMedia.forEach((currentMedia) => { // Adding index as a second parameter
+                    const mediaModel = mediaTemplate(currentMedia, media);
                     gallerySection.appendChild(mediaModel);
                 });
             });
@@ -155,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Initially display media sorted by likes
             sortSelect.value = 'likes';
             const sortedMedia = filteredMedia.sort((a, b) => b.likes - a.likes); // Sort by likes (descending)
-            sortedMedia.forEach((currentMedia, index) => {
-                const mediaModel = mediaTemplate(currentMedia, index, media);
+            sortedMedia.forEach((currentMedia) => {
+                const mediaModel = mediaTemplate(currentMedia, media);
                 gallerySection.appendChild(mediaModel);
             });
         }
@@ -178,11 +178,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Calculate total likes for the current photographer
                 const totalLikes = filteredMedia.reduce((acc, curr) => acc + curr.likes, 0);
 
-                // Calculate total number of media items
-                const totalMedia = filteredMedia.length;
-        
                 // Display media data
-                await displayMediaData(filteredMedia, totalMedia);
+                await displayMediaData(filteredMedia);
         
                 // Find the parent element where you want to add the info rectangle
                 const main = document.querySelector('main');
