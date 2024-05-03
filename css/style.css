@@ -41,6 +41,7 @@ h2 {
 .user-card {
     position: relative;
     display: flex;
+    cursor: pointer;
     flex-direction: column;
     justify-content: center;
     align-items: center;

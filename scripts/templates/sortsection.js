@@ -3,7 +3,7 @@ const sortSection = document.querySelector('.sort-section');
 const sortSelect = document.getElementById('sort-select');
 const options = sortSelect.getElementsByTagName('option');
 
-// Add event listener to "Popularité" option for showing other options on hover
+// Add event listener : showing other options on hover
 sortSelect.addEventListener('mouseover', () => {
     sortSelect.size = options.length; // Show all options
 });

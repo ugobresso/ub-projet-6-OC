@@ -13,16 +13,17 @@ async function getPhotographers() {
     }
 }
 
-// Function to show photographers data on the website
+// Function to show photographers data on the website ; cf. ./templates/photographer.js for the full function 'photographerTemplate'
 async function displayData(photographers) {
-    const photographersSection = document.getElementsByClassName("photographer_section")[0];
+    const photographersSection = document.getElementsByClassName("photographer_section")[0]; // get the first iteration of the classname
 
     photographers.forEach((currentPhotographer) => {
         const photographerModel = photographerTemplate(currentPhotographer);
         photographersSection.appendChild(photographerModel);
 
-        // Adding a click event handler to each photographer card
+        // Adding a click event handler to each photographer card and then 3 actions are launched :
         photographerModel.addEventListener('click', () => {
+
             // Get photographers data
             const photographerInfo = {
                 id: currentPhotographer.id,
@@ -33,7 +34,6 @@ async function displayData(photographers) {
                 portrait: currentPhotographer.portrait
             };
 
-
             // Store the photographer's information for the next page
             localStorage.setItem('selectedPhotographer', JSON.stringify(photographerInfo));
 
@@ -42,6 +42,9 @@ async function displayData(photographers) {
         });
     });
 }
+
+// Now all the data of the photographer that the user has clicked on is locally stored
+// use photographerInfo to get it all later (key = 'selectedPhotographer')
 
 async function init() {
     // Return photographers data from JSON file
